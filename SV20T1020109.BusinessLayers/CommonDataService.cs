@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SV20T1020109.DomainModels;
-using SV20T1020109.DataLayers;
 using SV20T1020109.DataLayers.SQLServer;
 using SV20T1020109.BusinessLayers;
+using SV20T1020109.DataLayers;
+using SV20T1020109.DomainModels;    
 
 namespace SV20T1020109.BusinessLayers
 {
@@ -46,6 +46,24 @@ namespace SV20T1020109.BusinessLayers
         {
             return ProvinceDB.List().ToList();
         }
+        public static List<Category> ListOfCatgoryLists()
+        {
+            return CategoryDB.List().ToList();
+        }
+        public static List<Supplier> ListOfSupplierLists()
+        {
+            return SupplierDB.List().ToList();
+        }
+
+        public static List<Customer> ListOfCustomers()
+        {
+            return CustomerDB.List().ToList();
+        }
+        public static List<Employee> ListOfEmployees()
+        {
+            return EmployeeDB.List().ToList();
+        }
+
         /// <summary>
         /// tim kiem va lay danh sach khach hang
         /// </summary>
@@ -93,7 +111,24 @@ namespace SV20T1020109.BusinessLayers
             return CustomerDB.IsUsed(id);
         }
 
-       
+
+
+        public static List<Supplier> ListOfSuppliers(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
+        {
+            rowCount = SupplierDB.Count(searchValue);
+            return SupplierDB.List(page, pageSize, searchValue).ToList();
+        }
+
+        /// <summary>
+        /// tìm kiếm và lấy danh sách nhà cung cấp nếu ko phân trang.
+        /// </summary>
+        /// <param name="SearchValue"></param>
+        /// <returns></returns>
+        public static List<Supplier> ListOfSuppliers(String SearchValue)
+        {
+            return SupplierDB.List(1, 0, SearchValue).ToList();
+        }
+
         public static Supplier? GetSupplier(int id)
         {
             return SupplierDB.Get(id);
@@ -213,6 +248,19 @@ namespace SV20T1020109.BusinessLayers
             rowCount = CategoryDB.Count(searchValue);
             return CategoryDB.List(page, pageSize, searchValue).ToList();
         }
+
+
+
+        /// <summary>
+        /// tìm kiếm và lấy danh sách nhà cung cấp nếu ko phân trang.
+        /// </summary>
+        /// <param name="SearchValue"></param>
+        /// <returns></returns>
+        public static List<Category> ListOfCategories(String SearchValue)
+        {
+            return CategoryDB.List(1, 0, SearchValue).ToList();
+        }
+
         public static Category? GetCategory(int id)
         {
             return CategoryDB.Get(id);
@@ -245,12 +293,6 @@ namespace SV20T1020109.BusinessLayers
         public static bool IsUserCategory(int id)
         {
             return CategoryDB.IsUsed(id);
-        }
-
-        public static List<Supplier> ListOfSuppliers(out int rowCount, int page = 1, int pageSize = 0, string searchValue = "")
-        {
-            rowCount = SupplierDB.Count(searchValue);
-            return SupplierDB.List(page, pageSize, searchValue).ToList();
         }
     }
 }

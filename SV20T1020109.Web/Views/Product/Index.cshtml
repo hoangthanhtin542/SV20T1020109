@@ -1,116 +1,79 @@
-﻿@model SV20T1020109.Web.Models.ProductSearchResult
+﻿@using SV20T1020109.Web
+@model SV20T1020109.Web.Models.ProductSearchInput
 @{
-    ViewBag.Title = " Quản lý mặt hàng";
+    ViewBag.Title = "Quản lý mặt hàng  ";
 }
 
-<div class="box box-primary">
+<div class=" box box-primary ">
     <div class="box-body">
-        <!--Form tim kiem: Nhap vao-->
-        <form id="formSearch" action="~/Product">
+        <!--Tìm kiêsm -->
+        <form id="formSearch" action="~/Product/Search" method="get" data-container="#searchResult">
+            @Html.HiddenFor(m => m.PageSize, "")
             <div class="row">
                 <div class="col-sm-3">
-                    <select class="form-control" name="categoryID">
-                        <option value="">--Loại hàng--</option>
-                        @{
-                            var categories = SV20T1020109.BusinessLayers.CommonDataService.ListOfCategorys(out var rowCount, Model.Page, Model.PageSize, Model.SearchValue);
-                            foreach (var item in categories)
-                            {
-                                if (item.CategoryID == Model.CategoryID)
-                                {
-                                    <option value="@item.CategoryID" selected>@item.CategoryName</option>
-                                }
-                                else
-                                {
-                                    <option value="@item.CategoryID">@item.CategoryName</option>
-                                }
-                            }
-                        }
-                    </select>
+                    @Html.DropDownListFor(m => m.SupplierID, SelectListHelper.ListOfSuppliers(), new { @class = "form-control list" })
+
                 </div>
                 <div class="col-sm-3">
-                    <select class="form-control" name="supplierID">
-                        <option value="">--Nhà cung cấp--</option>
-                        @{
-                            var suppliers = SV20T1020109.BusinessLayers.CommonDataService.ListOfSuppliers(out var RowCount, Model.Page, Model.PageSize, Model.SearchValue);
-                            foreach (var item in suppliers)
-                            {
-                                if (item.SupplierID == Model.SupplierID)
-                                {
-                                    <option value="@item.SupplierID" selected>@item.SupplierName</option>
-                                }
-                                else
-                                {
-                                    <option value="@item.SupplierID">@item.SupplierName</option>
-                                }
-                            }
-                        }
-                    </select>
+                    @Html.DropDownListFor(m => m.CategoryID, SelectListHelper.ListOfCategorys(), new { @class = "form-control list" })
+
                 </div>
-                <div class=" col-sm-6 input-group">
-                    <input name="searchValue" type="text" class="form-control" placeholder="Nhập tên mặt hàng cần tìm">
+                <div class="col-sm-6 input-group">
+                    <input name="searchValue" type="text" class="form-control"
+                           placeholder="Nhập tên mặt hàng cần tìm ">
                     <div class="input-group-btn">
-                        <button class="btn btn-info" type="submit">
+                        <button class="btn btn-default" type="submit">
                             <i class="glyphicon glyphicon-search"></i>
                         </button>
                         <a href="~/Product/Create" class="btn btn-primary" style="margin-left:5px">
-                            <i class="fa fa-plus"></i> Bổ sung
+                            <i class="fa fa-plus"></i>
+                            Bổ sung
                         </a>
                     </div>
                 </div>
             </div>
+            <div class="input-group">
+            </div>
         </form>
-        <!--Ket qua tim kiem: Hien thi-->
-        <p style="margin: 10px 0 10px 0;">
-            Có <strong>@Model.RowCount</strong> mặt hàng trong tổng số <strong>@Model.PageCount</strong> trang
-        </p>
-        <div class="table-responsive">
-            <table class="table table-bordered table hover table-striped">
-                <thead>
-                    <tr class="bg-primary">
-                        <th>Ảnh</th>
-                        <th>Tên mặt hàng</th>
-                        <th>Đơn vị tính</th>
-                        <th>Giá</th>
-                        <th style="width: 80px;"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Data)
-                    {
-                        <tr>
-                            <td class="text-center">
-                                <img class="img-thumbnail" style="max-height: 100px;" src="~/images/products/@item.Photo" alt="No Photo" />
-                            </td>
-                            <td>@item.ProductName</td>
-                            <td>@item.Unit</td>
-                            <td>@item.Price</td>
-                            <td class="text-right">
-                                <a href="~/Product/Edit/@item.ProductID" class="btn btn-xs btn-info">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a href="~/Product/Delete/@item.ProductID" class="btn btn-xs btn-danger">
-                                    <i class="fa fa-remove"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        <div class="text-center">
-            <ul class="pagination">
-                @for (int p = 1; p <= Model.PageCount; p++)
-                {
-                    if (p == Model.Page)
-                    {
-                        <li class="active"><a href="#">@p</a></li>
-                    }
-                    else
-                    {
-                        <li><a href="~/Product?page=@p&searchValue=@Model.SearchValue">@p</a></li>
-                    }
-                }
-            </ul>
+
+        <!--Hiển thị tìm kiếm -->
+
+        <div id="searchResult">
         </div>
     </div>
 </div>
+@section scripts {
+    <script>
+        $(document).ready(function (e) {
+            $("#formSearch").submit(function (e) {
+                e.preventDefault();
+                doSearch(this, 1);
+                return;
+            });
+            doSearch("#formSearch", @Model.Page);
+        });
+
+        function doSearch(formSearch, page) {
+            var action = $(formSearch).prop("action");
+            var method = $(formSearch).prop("method");
+            var container = $(formSearch).data("container");
+
+            var searchData = $(formSearch).serializeArray();
+            searchData.push({ "name": "Page", "value": page });
+
+            $.ajax({
+                url: action,
+                type: method,
+                data: searchData,
+                async: false,
+                error: function () {
+                    alert("Your request is not valid!");
+                },
+                success: function (data) {
+                    $(container).html(data);
+                }
+            });
+        }
+    </script>
+}
+

@@ -1,5 +1,4 @@
-﻿
-using SV20T1020109.DomainModels;
+﻿using SV20T1020109.DomainModels;
 
 namespace SV20T1020109.DataLayers
 {

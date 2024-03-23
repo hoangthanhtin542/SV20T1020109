@@ -11,7 +11,7 @@ namespace SV20T1020109.BusinessLayers
         /// <summary>
         /// chuỗi thông số kết nối đến CSDL
         /// </summary>
-        public static String ConnectionString { get; set; } = "";
+        public static String ConnectionString { get; private set; } = "";
         public static void Initialize(string connectionString)
         {
             Configuration.ConnectionString = connectionString;

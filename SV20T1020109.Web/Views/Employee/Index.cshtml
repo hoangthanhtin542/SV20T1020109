@@ -1,87 +1,61 @@
-﻿@model SV20T1020109.Web.Models.EmployeeSearchResult
+﻿@model PaginationSearchInput
 @{
-    ViewBag.Title = " Quản lý nhân viên";
+    ViewData["Title"] = "Quản lý Nhân viên";
 }
 
 <div class="box box-primary">
     <div class="box-body">
-        <!--Form tim kiem: Nhap vao-->
-        <form id="formSearch" action="~/Employee">
+        @* Form nhập đầu vào tìm kiếm*@
+        <form id="formSearch" action="~/Employee/Search" method="get" data-container="#searchResult">
+            @Html.HiddenFor(m => m.PageSize, "")
             <div class="input-group">
-                <input name="searchValue" type="text" class="form-control"
-                       placeholder="Nhập tên khách hàng cần tìm" value="@Model.SearchValue">
+                <input type="text" class="form-control" placeholder="Nhập tên nhân viên cần tìm" name="searchValue" value="@Model.SearchValue">
                 <div class="input-group-btn">
-                    <button class="btn btn-info" type="submit">
+                    <button class="btn btn-default" type="submit">
                         <i class="glyphicon glyphicon-search"></i>
                     </button>
                     <a href="~/Employee/Create" class="btn btn-primary" style="margin-left:5px">
                         <i class="fa fa-plus"></i> Bổ sung
                     </a>
                 </div>
-
             </div>
         </form>
-        <!--Ket qua tim kiem: Hien thi-->
-        <p style="margin: 10px 0 10px 0;">
-            Có <strong>@Model.RowCount</strong> nhân viên trong tổng số <strong>@Model.PageCount</strong> trang
-        </p>
-        <div class="row">
-            @foreach (var item in Model.Data)
-            {
-                <div class="col-sm-4">
-                    <div class="box box-info">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">@item.FullName</h3>
-                            <div class="box-tools pull-right">
-                                <a class="btn btn-box-tool" href="~/Employee/Edit/@item.EmployeeID">
-                                    <i class="fa fa-edit text-primary"></i>
-                                </a>
-                                <a class="btn btn-box-tool" href="~/Employee/Delete/@item.EmployeeID">
-                                    <i class="fa fa-trash text-danger"></i>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <img class="profile-user-img img-responsive img-bordered"
-                                         src="~/images/employees/@item.Photo">
-                                </div>
-                                <div class="col-sm-8">
-                                    <ul class="list-group list-group-unbordered">
-                                        <li class="list-group-item">
-                                            <i class="fa fa-birthday-cake"></i> @item.FormattedBirthDate
-                                        </li>
-                                        <li class="list-group-item">
-                                            <i class="fa fa-phone"></i> @item.Phone
-                                        </li>
-                                        <li class="list-group-item">
-                                            <i class="fa fa-envelope"></i> @item.Email
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.box-body -->
-                    </div>
-                </div>
-            }
-        </div>
-        <div class="text-center">
-            <ul class="pagination">
-                @for (int p = 1; p <= Model.PageCount; p++)
-                {
-                    if (p == Model.Page)
-                    {
-                        <li class="active"><a href="#">@p</a></li>
-                    }
-                    else
-                    {
-                        <li><a href="~/Employee?page=@p&searchValue=@Model.SearchValue">@p</a></li>
-                    }
-                }
-            </ul>
+        @* Hiện thị kết quả tìm kiếm *@
+        <div id="searchResult">
         </div>
     </div>
 </div>
+@section scripts {
+    <script>
+        $(document).ready(function (e) {
+            $("#formSearch").submit(function (e) {
+                e.preventDefault();
+                doSearch(this, 1);
+                return;
+            });
+            doSearch("#formSearch", @Model.Page);
+        });
+
+        function doSearch(formSearch, page) {
+            var action = $(formSearch).prop("action");
+            var method = $(formSearch).prop("method");
+            var container = $(formSearch).data("container");
+
+            var searchData = $(formSearch).serializeArray();
+            searchData.push({ "name": "Page", "value": page });
+
+            $.ajax({
+                url: action,
+                type: method,
+                data: searchData,
+                async: false,
+                error: function () {
+                    alert("Your request is not valid!");
+                },
+                success: function (data) {
+                    $(container).html(data);
+                }
+            });
+        }
+    </script>
+}

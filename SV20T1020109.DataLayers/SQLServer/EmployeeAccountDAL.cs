@@ -14,7 +14,7 @@ namespace SV20T1020109.DataLayers.SQLServer
         public EmployeeAccountDAL(string connectionString) : base(connectionString)
         {
         }
-        public UserAccount Authorize(string userName, string password)
+        public UserAccount? Authorize(string userName, string password)
         {
             UserAccount data;
             using (var cn = OpenConnection())
@@ -27,7 +27,7 @@ namespace SV20T1020109.DataLayers.SQLServer
                     Email = userName,
                     Password = password,
                 };
-                data = cn.QuerySingleOrDefault <UserAccount> (sql, parameters);
+                data = cn.QuerySingleOrDefault<UserAccount>(sql, parameters);
                 cn.Close();
             }
             return data;

@@ -7,22 +7,22 @@ namespace SV20T1020109.BusinessLayers
 {
     public class UserAccountService
     {
-        private static readonly IUserAccountDAL employeeAccountDB;
+        private static readonly IUserAccountDAL _userAccountDAL;
         static UserAccountService()
         {
-            employeeAccountDB = new EmployeeAccountDAL(Configuration.ConnectionString);
+            _userAccountDAL = new EmployeeAccountDAL(Configuration.ConnectionString);
         }
         public static UserAccount? Authorize(string userName, string password)
         {
             //TODO: Kiểm tra thông tin đăng nhập của Employee
-            return employeeAccountDB.Authorize(userName, password);
+            return _userAccountDAL.Authorize(userName, password);
 
         }
         public static bool ChangePassword(string userName, string oldPassword, string newPassword)
         {
 
             //TODO: Thay đổi mật khẩu của Employee
-            return employeeAccountDB.ChangePassword(userName, oldPassword, newPassword);
+            return _userAccountDAL.ChangePassword(userName, oldPassword, newPassword);
 
         }
     }

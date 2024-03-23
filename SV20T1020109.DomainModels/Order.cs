@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SV20T1020109.DomainModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,90 +9,28 @@ namespace SV20T1020109.DomainModels
 {
     public class Orders
     {
-        /// <summary>
-        /// Mã đơn hàng
-        /// </summary>
         public int OrderID { get; set; }
-        /// <summary>
-        /// Mã khách hàng đặt mua hàng
-        /// </summary>
-        public int? CustomerID { get; set; }
-        /// <summary>
-        /// Thời điểm đặt hàng
-        /// </summary>
         public DateTime OrderTime { get; set; }
-        /// <summary>
-        /// tên tỉnh thành 
-        /// </summary>
+        public DateTime? AcceptTime { get; set; }
+        public int CustomerID { get; set; }
+        public string CustomerName { get; set; } = "";
+        public string CustomerContactName { get; set; } = "";
+        public string CustomerAddress { get; set; } = "";
+        public string CustomerPhone { get; set; } = "";
+        public string CustomerEmail { get; set; } = "";
         public string DeliveryProvince { get; set; } = "";
-        /// <summary>
-        /// địa chỉ
-        /// </summary>
         public string DeliveryAddress { get; set; } = "";
-        /// <summary>
-        /// Mã của nhân viên phụ trách đơn hàng
-        /// </summary>
         public int? EmployeeID { get; set; }
-        /// <summary>
-        /// Thời điểm chấp nhận đơn hàng
-        /// </summary>
-        public DateTime? AcceptTime { get; set; } = null;
-        /// <summary>
-        /// Mã người giao hàng
-        /// </summary>
-        public int? ShipperID { get; set; } = null;
-        /// <summary>
-        /// Thời điểm bắt đầu giao hàng
-        /// </summary>
+        public string EmployeeName { get; set; } = "";
+        public int? ShipperID { get; set; }
+        public string ShipperName { get; set; } = "";
+        public string ShipperPhone { get; set; } = "";
         public DateTime? ShippedTime { get; set; }
-        /// <summary>
-        /// Thời điểm kết thúc quá trình xử lý đối với đơn hàng (là thời điểm khách nhận hàng nếu đơn hàng
-        /// được giao, hoặc thời điểm thực hiện việc hủy bỏ/từ chối đơn hàng nếu đơn hàng bị hủy bỏ hoặc từ chối)
-        /// </summary>
         public DateTime? FinishedTime { get; set; }
-        /// <summary>
-        /// Mã trạng thái đơn hàng
-        /// </summary>
         public int Status { get; set; }
-        /////
+        /// <summary> 
+        /// Mô tả trạng thái đơn hàng dựa trên mã trạng thái     /// </summary> 
 
-        /*  /// <summary>
-          /// Tên khách hàng
-          /// </summary>
-          public string CustomerName { get; set; }
-          /// <summary>
-          /// Tên giao dịch của khách hàng
-          /// </summary>
-          public string CustomerContactName { get; set; }
-          /// <summary>
-          /// Địa chỉ của khách hàng
-          /// </summary>
-          public string CustomerAddress { get; set; }
-          /// <summary>
-          /// Email của khách hàng
-          /// </summary>
-          public string CustomerEmail { get; set; }
-
-
-
-          /// <summary>
-          /// Họ tên của nhân viên phụ trách đơn hàng
-          /// </summary>
-          public string EmployeeFullName { get; set; }
-
-
-          /// <summary>
-          /// Tên người giao hàng
-          /// </summary>
-          public string ShipperName { get; set; }
-          /// <summary>
-          /// Điện thoại của người giao hàng
-          /// </summary>
-          public string ShipperPhone { get; set; }*/
-
-        /// <summary>
-        /// Mô tả trạng thái đơn hàng dựa trên mã trạng thái
-        /// </summary>
         public string StatusDescription
         {
             get
@@ -115,5 +54,7 @@ namespace SV20T1020109.DomainModels
                 }
             }
         }
+
+
     }
 }

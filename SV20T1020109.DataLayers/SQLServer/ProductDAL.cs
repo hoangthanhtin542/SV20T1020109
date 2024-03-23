@@ -19,7 +19,7 @@ namespace SV20T1020109.DataLayers.SQLServer
             using (var connection = OpenConnection())
             {
                 var sql = @"    insert into Products(ProductName, ProductDescription, SupplierID, CategoryId, Unit, Price, Photo, IsSelling)
-                                values(@ProductName, @ProductDescription, @SupplierID, @CategoryId, @Unit, @Price, @Photo, @IsSelling);
+                                values(@ProductName, @ProductDescription, @SupplierID, @CategoryId, @Unit, @Price, @photo, @IsSelling);
                                 select @@identity";   // @@identity khong phai tham so ma la bien
                 var parameters = new
                 {
@@ -29,7 +29,7 @@ namespace SV20T1020109.DataLayers.SQLServer
                     CategoryID = data.CategoryID,
                     Unit = data.Unit ?? "",
                     Price = data.Price,
-                    Photo = data.Photo ?? "",
+                    photo = data.Photo ?? "",
                     IsSelling = data.IsSelling,
                 };
                 id = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: System.Data.CommandType.Text);
@@ -48,7 +48,7 @@ namespace SV20T1020109.DataLayers.SQLServer
                                 select @@identity";   // @@identity khong phai tham so ma la bien
                 var parameters = new
                 {
-                    ProductId = data.ProductId,
+                    ProductId = data.ProductID,
                     AttributeName = data.AttributeName ?? "",
                     AttributeValue = data.AttributeValue ?? "",
                     DisplayOrder = data.DisplayOrder,
@@ -64,16 +64,16 @@ namespace SV20T1020109.DataLayers.SQLServer
             int id = 0;
             using (var connection = OpenConnection())
             {
-                var sql = @"    insert into Products(ProductID, Photo, Description, DisplayOrder, IsHidden)
-                                values(@ProductID, @Photo, @Description, @DisplayOrder, @IsHidden);
-                                select @@identity";   // @@identity khong phai tham so ma la bien
+                var sql = @"insert into ProductPhotos(ProductID,Photo,Description,DisplayOrder,IsHidden)
+                     values(@ProductID,@photo,@Description,@DisplayOrder,@IsHidden);
+                     select @@identity; ";
                 var parameters = new
                 {
-                    ProductId = data.ProductId,
-                    AttributeName = data.Photo ?? "",
-                    AttributeValue = data.Description ?? "",
+                    ProductID = data.ProductID,
+                    Photo = data.Photo ?? "",
+                    Description = data.Description ?? "",
                     DisplayOrder = data.DisplayOrder,
-                    IsHidden = data.IsHidden
+                    IsHidden = data.IsHidden,
                 };
                 id = connection.ExecuteScalar<int>(sql: sql, param: parameters, commandType: System.Data.CommandType.Text);
                 connection.Close();
@@ -348,8 +348,8 @@ namespace SV20T1020109.DataLayers.SQLServer
                                 where AttributeId = @AttributeId";
                 var parameters = new
                 {
-                    AttributeId = data.AttributeId,
-                    ProductId = data.ProductId,
+                    AttributeId = data.AttributeID,
+                    ProductId = data.ProductID,
                     AttributeName = data.AttributeName ?? "",
                     AttributeValue = data.AttributeValue ?? "",
                     DisplayOrder = data.DisplayOrder,
@@ -365,21 +365,21 @@ namespace SV20T1020109.DataLayers.SQLServer
             bool result = false;
             using (var connection = OpenConnection())
             {
-                var sql = @"    update ProductAttributes
-                                set ProductID = @ProductID
-                                    AttributeName = @AttributeName,
-                                    AttributeValue = @AttributeValue,
-                                    DisplayOrder = @DisplayOrder,
-                                    IsHidden = @IsHidden
-                                where PhotoId = @PhotoId";
+                var sql = @"UPDATE ProductPhotos
+                     SET ProductID = @productID,
+                         Photo = @Photo,
+                         Description = @description,
+                         DisplayOrder = @displayOrder,
+                         IsHidden = @isHidden
+                     WHERE PhotoID = @PhotoID";
                 var parameters = new
                 {
-                    PhotoId = data.PhotoId,
-                    ProductId = data.ProductId,
-                    AttributeName = data.Photo ?? "",
-                    AttributeValue = data.Description ?? "",
-                    DisplayOrder = data.DisplayOrder,
-                    IsHidden = data.IsHidden
+                    productID = data.ProductID,
+                    Photo = data.Photo ?? "",
+                    description = data.Description ?? "",
+                    displayOrder = data.DisplayOrder,
+                    isHidden = data.IsHidden,
+                    photoID = data.PhotoID
                 };
                 result = connection.Execute(sql: sql, param: parameters, commandType: System.Data.CommandType.Text) > 0;
                 connection.Close();

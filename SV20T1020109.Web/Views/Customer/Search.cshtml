@@ -14,7 +14,7 @@
                 <th>Điện thoại</th>
                 <th>Email</th>
                 <th>Địa chỉ</th>
-                <th>Tỉnh thành</th>
+                <th>Tỉnh/thành</th>
                 <th>Bị khóa?</th>
                 <th style="width: 80px;"></th>
             </tr>
@@ -29,7 +29,7 @@
                     <td>@item.Email</td>
                     <td>@item.Address</td>
                     <td>@item.Province</td>
-                    <td></td>
+                    <td>@item.IsLocked</td>
                     <td>
                         <a href="~/Customer/Edit/@item.CustomerID" class="btn btn-xs btn-info">
                             <i class="fa fa-edit"></i>

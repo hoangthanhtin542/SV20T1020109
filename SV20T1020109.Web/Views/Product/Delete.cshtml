@@ -1,59 +1,76 @@
-﻿@{
-    ViewBag.Title = "Xoá mặt hàng";
+﻿@model SV20T1020109.DomainModels.Product
+@{
+    ViewBag.Title = "Xóa mặt hàng";
 }
 
+<div class="box box-primary">
 
-    <div class="box box-primary">
 
     <div class="box-body">
-        <form class="form-horizontal" action="#" method="post" enctype="multipart/form-data">
+        <form class="form-horizontal" action="~/Product/Delete/@Model.ProductID" method="post" enctype="multipart/form-data">
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Tên mặt hàng:</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static">IP 15 Promax</p>
+                    <p class="form-control-static"> @Model.ProductName </p>
+
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Mô tả:</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static">15 promax mới nhất</p>
+                    <p class="form-control-static"> @Model.ProductDescription </p>
                 </div>
             </div>
+
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Đơn vị tính:</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static">Cái</p>
+                    <p class="form-control-static"> @Model.Unit </p>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-sm-2">Giá hàng:</label>
                 <div class="col-sm-10">
-                    <p class="form-control-static">15,000,000</p>
+                    <p class="form-control-static"> @Model.Price </p>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <label class="control-label col-sm-2">Ảnh minh họa:</label>
+                <div class="col-sm-10">
+                    <input type="file" class="form-control" name="uploadPhoto" accept="image/*"
+                           onchange="document.getElementById('Photo').src = window.URL.createObjectURL(this.files[0])" />
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-lg-offset-2 col-sm-10">
-                    <input type="hidden" name="Photo" value="photo1.png" />
-                    <img id="Photo" src="~/images/products/photo1.png" class="img img-bordered" style="width:200px" />
+                    <input type="hidden" name="Photo" value="photo.png" />
+                    <img id="Photo" src="@Model.Photo" class="img img-bordered" style="width:200px" />
                 </div>
             </div>
 
             <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-danger">
-                        <i class="fa fa-save"></i> Xác nhận xoá
-                    </button>
-                    <a class="btn btn-default" href="~/Product">    
+                <div class="col-sm-offset-2 col-sm-10"> 
+                    @if(ViewBag.AllowDelete){
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fa fa-trash"></i>
+                            Xóa dữ liệu
+                        </button>
+                    }
+                    <a class="btn btn-default" href="~/Product">
                         Quay lại
                     </a>
                 </div>
             </div>
         </form>
-        </div>
+
+    </div>
 
 </div>

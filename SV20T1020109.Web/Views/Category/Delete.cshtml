@@ -13,10 +13,13 @@
                 <p class="form-control-static">@Model.Description</p>
             </div>
             <div class="form-group text-right">
-                <button type="submit" class="btn btn-danger">
-                    <i class="fa fa-frash"></i>
-                    Xác nhận xoá
-                </button>
+                @if (ViewBag.AllowDelete)
+                {
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa fa-trash"></i>
+                        Xóa dữ liệu
+                    </button>
+                }
                 <a href="~/Category" class="btn btn-default">
                     Quay lại
                 </a>

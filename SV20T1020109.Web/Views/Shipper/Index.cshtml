@@ -1,81 +1,62 @@
-﻿@{
-    ViewBag.Title = "Quản lý người giao hàng";
+﻿@model PaginationSearchInput
+@{
+    ViewBag.Title = " Quản lý người giao hàng";
 }
-
-<div class=" box box-primary ">
+<div class="box box-primary">
     <div class="box-body">
-        <!--Form nhập đầu vào tìm kiếm-->
-        <form id="formsearch" action="~/Shipper">
+        <!--Form tim kiem: Nhap vao-->
+        <form id="formSearch" action="~/Shipper/Search" method="get" data-container="#searchResult">
             <div class="input-group">
-                <input name="searchValue" type="text" class="form-control"
-                       placeholder="Nhập tên người giao hàng cần tìm " value="@Model.SearchValue">
+                <input type="hidden" name="@nameof(Model.PageSize)" value="@Model.PageSize" />
+
+                <input name="@nameof(Model.SearchValue)" type="text" class="form-control"
+                       placeholder="Nhập tên khách hàng cần tìm" value="@Model.SearchValue">
                 <div class="input-group-btn">
-                    <button class="btn btn-default" type="submit">
+                    <button class="btn btn-info" type="submit">
                         <i class="glyphicon glyphicon-search"></i>
                     </button>
-
-                    <a href="~/Shipper/Create" class="btn btn-primary" style="margin-left: 5px">
-                        <i class="fa fa-plus"></i>
-                        Bổ sung
+                    <a href="~/Shipper/Create" class="btn btn-primary" style="margin-left:5px">
+                        <i class="fa fa-plus"></i> Bổ sung
                     </a>
                 </div>
+
             </div>
         </form>
-
-        <!--Hiển thị kết quả tìm kiếm -->
-
-        <div>
-            <p style="margin: 10px 0 10px 0">
-                có <strong>@Model.RowCount</strong> Người giao hàng trong tổng số <strong>@Model.PageCount</strong> trang
-            </p>
-
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover table-striped">
-                    <thead>
-                        <tr class="bg-primary">
-                            <th>Tên người giao hàng </th>
-                            <th>Điện thoại </th>
-                            <th style="width:80px"> </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Data)
-                        {
-                            <tr>
-                                <td>@item.ShipperName</td>
-                                <td>@item.Phone</td>
-                                <td>
-                                    <a href="~/Shipper/Edit/@item.ShipperID" class="btn btn-xs btn-info">
-                                        <i class="fa fa-edit"></i>
-                                    </a>
-                                    <a href="~/Shipper/Delete/@item.ShipperID" class="btn btn-xs btn-danger">
-                                        <i class="fa fa-remove"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <div class="text-center">
-                <ul class="pagination">
-                    @for (int p = 1; p <= Model.PageCount; p++)
-                    {
-                        if (p == Model.Page)
-                        {
-                            <li class="active"><a href="#">@p</a></li>
-                        }
-                        else
-                        {
-                            <li><a href="~/Shipper?page=@p&searchValue=@Model.SearchValue">@p</a></li>
-                        }
-                    }
-                </ul>
-            </div>
-
-
+        <!--Ket qua tim kiem: Hien thi-->
+        <div id="searchResult">
         </div>
-
-
     </div>
 </div>
+@section scripts {
+    <script>
+        $(document).ready(function (e) {
+            $("#formSearch").submit(function (e) {
+                e.preventDefault();
+                doSearch(this, 1);
+                return;
+            });
+            doSearch("#formSearch", @Model.Page);
+        });
+
+        function doSearch(formSearch, page) {
+            var action = $(formSearch).prop("action");
+            var method = $(formSearch).prop("method");
+            var container = $(formSearch).data("container");
+
+            var searchData = $(formSearch).serializeArray();
+            searchData.push({ "name": "Page", "value": page });
+            $.ajax({
+                url: action,
+                type: method,
+                data: searchData,
+                async: false,
+                error: function () {
+                    alert("Your request is not valid!");
+                },
+                success: function (data) {
+                    $(container).html(data);
+                }
+            });
+        }
+    </script>
+}

@@ -1,5 +1,5 @@
 ﻿using SV20T1020109.DomainModels;
-using static NuGet.Packaging.PackagingConstants;
+
 namespace SV20T1020109.Web.Models
 {
     /// <summary>
@@ -15,6 +15,9 @@ namespace SV20T1020109.Web.Models
         public decimal minPrice { get; set; }
         public decimal maxPrice { get; set; }
         public int RowCount { get; set; }
+
+
+
         public int PageCount
         {
             get
@@ -63,9 +66,17 @@ namespace SV20T1020109.Web.Models
         public List<Product> Data { get; set; }
 
     }
-    public class OrderSearchResult : BasePaginationResult
+    public class PhotoSearchResult : BasePaginationResult
     {
-        public List<Orders> Data { get; set; }
+        public List<ProductPhoto> Data { get; set; } = new List<ProductPhoto>();
 
     }
+    public class OrderSearchResult : BasePaginationResult
+    {
+        public int Status { get; set; } = 0;
+        public string TimeRange { get; set; } = "";
+        public List<Orders> Data { get; set; } = new List<Orders>();
+    }
+
+
 }

@@ -2,7 +2,8 @@
 using SV20T1020109.Web;
 
 var builder = WebApplication.CreateBuilder(args);
-//Add cac sevice can dung trong Application
+
+//Add các service cần dùng trong Application
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews()
     .AddMvcOptions(option =>
@@ -23,6 +24,8 @@ builder.Services.AddSession(option =>
     option.Cookie.HttpOnly = true;
     option.Cookie.IsEssential = true;
 });
+// Add services to the container.
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -46,10 +49,6 @@ ApplicationContext.Configure
     httpContextAccessor: app.Services.GetRequiredService<IHttpContextAccessor>(),
     hostEnvironment: app.Services.GetService<IWebHostEnvironment>()
 );
-
-
-
-
 string connectionString = "server=ADMIN-PC;user id=sa;password=123;database=LiteCommerceDB;TrustServerCertificate=true";
 SV20T1020109.BusinessLayers.Configuration.Initialize(connectionString);
 

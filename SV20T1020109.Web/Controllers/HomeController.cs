@@ -6,7 +6,7 @@ using static SV20T1020109.Web.WebSecurityModels;
 
 namespace SV20T1020109.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = $"{WebUserRoles.Administrator},{WebUserRoles.Employee}")]
 
     public class HomeController : Controller
     {

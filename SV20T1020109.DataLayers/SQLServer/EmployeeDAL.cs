@@ -1,4 +1,4 @@
-﻿    using SV20T1020109.DomainModels;
+﻿using SV20T1020109.DomainModels;
 using Dapper;
 using System;
 using System.Collections.Generic;

@@ -1,68 +1,43 @@
-﻿@model PaginationSearchInput
+﻿@model SV20T1020109.DomainModels.Category
 @{
-    ViewBag.Title = "Quản lý Loại hàng";
+
 }
 
-<div class=" box box-primary ">
+<div class="box box-primary">
     <div class="box-body">
-        <!--Tìm kiêsm -->
-        <form id="formSearch" action="~/Category/Search" method="get" data-container="#searchResult">
-            @Html.HiddenFor(m => m.PageSize, "")
-            <div class="input-group">
-                <input name="searchValue" type="text" class="form-control"
-                       placeholder="Nhập tên loại hàng cần tìm " value="@Model.SearchValue">
-                <div class="input-group-btn">
-                    <button class="btn btn-default" type="submit">
-                        <i class="glyphicon glyphicon-search"></i>
-                    </button>
+        <form action="~/Category/Save" method="post">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <input type="hidden" name="CategoryID" value="@Model.CategoryID" />
+                <label>Tên loại hàng</label>
+                <input type="text" class="form-control" value="@Model.CategoryName" name="CategoryName" autofocus>
+                @Html.ValidationMessageFor(m => m.CategoryName, "", new { @style = "color:#f00" })
+            </div>
 
-                    <a href="~/Category/Create" class="btn btn-primary" style="margin-left: 5px">
-                        <i class="fa fa-plus"></i>
-                        Bộ sung
+            <div class="form-group">
+                <label>Mô tả sản phẩm</label>
+                <textarea class="form-control" id="Description" name="Description" rows="5">@Model.Description</textarea>
+                @Html.ValidationMessageFor(m => m.Description, "", new { @style = "color:#f00" })
+            </div>
 
-                    </a>
-
-                </div>
+            <div class="form-group text-right">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-floppy-o"></i>
+                    Lưu dữ liệu
+                </button>
+                <a href="~/Category" class="btn btn-default">
+                    Quay lại
+                </a>
             </div>
         </form>
-
-        <div id="searchResult">
-        </div>
     </div>
 </div>
 
-<!--Hiển thị tìm kiếm -->
 @section scripts {
+    <script src="~/tinymce/js/tinymce/tinymce.min.js"></script>
     <script>
-        $(document).ready(function (e) {
-            $("#formSearch").submit(function (e) {
-                e.preventDefault();
-                doSearch(this, 1);
-                return;
-            });
-            doSearch("#formSearch", @Model.Page);
+        tinymce.init({
+            selector: '#editor'
         });
-
-        function doSearch(formSearch, page) {
-            var action = $(formSearch).prop("action");
-            var method = $(formSearch).prop("method");
-            var container = $(formSearch).data("container");
-
-            var searchData = $(formSearch).serializeArray();
-            searchData.push({ "name": "Page", "value": page });
-
-            $.ajax({
-                url: action,
-                type: method,
-                data: searchData,
-                async: false,
-                error: function () {
-                    alert("Your request is not valid!");
-                },
-                success: function (data) {
-                    $(container).html(data);
-                }
-            });
-        }
     </script>
 }
